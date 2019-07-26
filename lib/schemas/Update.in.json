@@ -1,0 +1,64 @@
+{
+    "type": "object",
+    "properties": {
+        "deviceID": {
+            "required": true,
+            "type": "int64"
+        },
+        "organization_id": {
+            "type": "int64"
+        },
+        "requestBody": {
+            "description": "Device is the definition of an app-running device configuration",
+            "type": "object",
+            "required": [
+                "name",
+                "os",
+                "pushToken",
+                "pushTokenDevelopment",
+                "active",
+                "ownerID"
+            ],
+            "properties": {
+                "active": {
+                    "description": "Whether this device will be used for notifications or not.",
+                    "type": "boolean",
+                    "x-go-name": "Active"
+                },
+                "id": {
+                    "description": "This device's ID. Will be set by the service on creation.",
+                    "type": "integer",
+                    "format": "int64",
+                    "x-go-name": "ID"
+                },
+                "name": {
+                    "description": "User-wide unique name for this device (e.g. Apple iPhone XS).",
+                    "type": "string",
+                    "x-go-name": "Name"
+                },
+                "os": {
+                    "description": "The device's OS (e.g. Android 9.0.1 / iOS 12).\nYou should at least include the \"android\" or \"ios\" keyword to allow a distinction between our push services.",
+                    "type": "string",
+                    "x-go-name": "OS"
+                },
+                "ownerID": {
+                    "description": "ID of the user this device is created for.",
+                    "type": "integer",
+                    "format": "int64",
+                    "x-go-name": "OwnerID"
+                },
+                "pushToken": {
+                    "description": "The device's pushtoken (Catapush / Apple Push)",
+                    "type": "string",
+                    "x-go-name": "PushToken"
+                },
+                "pushTokenDevelopment": {
+                    "description": "Defines if the given push-token should be used in a development-environment or not (APNS only)",
+                    "type": "boolean",
+                    "x-go-name": "PushTokenDevelopment"
+                }
+            },
+            "x-go-package": "groupalarm.com/go/app/api/services"
+        }
+    }
+}

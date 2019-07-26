@@ -1,0 +1,2815 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "description": "The app service implements all app functions for GroupAlarm\n\n# Authentication\n\n<!-- ReDoc-Inject: <security-definitions> -->",
+        "title": "groupalarm App API",
+        "version": "1.15.2",
+        "x-logo": {
+            "url": "https://www.groupalarm.com/favicon/logo_512.png"
+        }
+    },
+    "paths": {
+        "/device": {
+            "get": {
+                "description": "Returns all devices for queried owner",
+                "tags": [
+                    "device"
+                ],
+                "operationId": "List",
+                "parameters": [
+                    {
+                        "description": "requested owner by using his userID",
+                        "name": "owner_id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "int64"
+                        }
+                    },
+                    {
+                        "description": "requesting organization, not required if user accesses his own resources",
+                        "name": "organization_id",
+                        "in": "query",
+                        "schema": {
+                            "type": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "device configurations for passed user",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "description": "Device is the definition of an app-running device configuration",
+                                        "type": "object",
+                                        "required": [
+                                            "name",
+                                            "os",
+                                            "pushToken",
+                                            "pushTokenDevelopment",
+                                            "active",
+                                            "ownerID"
+                                        ],
+                                        "properties": {
+                                            "active": {
+                                                "description": "Whether this device will be used for notifications or not.",
+                                                "type": "boolean",
+                                                "x-go-name": "Active"
+                                            },
+                                            "id": {
+                                                "description": "This device's ID. Will be set by the service on creation.",
+                                                "type": "integer",
+                                                "format": "int64",
+                                                "x-go-name": "ID"
+                                            },
+                                            "name": {
+                                                "description": "User-wide unique name for this device (e.g. Apple iPhone XS).",
+                                                "type": "string",
+                                                "x-go-name": "Name"
+                                            },
+                                            "os": {
+                                                "description": "The device's OS (e.g. Android 9.0.1 / iOS 12).\nYou should at least include the \"android\" or \"ios\" keyword to allow a distinction between our push services.",
+                                                "type": "string",
+                                                "x-go-name": "OS"
+                                            },
+                                            "ownerID": {
+                                                "description": "ID of the user this device is created for.",
+                                                "type": "integer",
+                                                "format": "int64",
+                                                "x-go-name": "OwnerID"
+                                            },
+                                            "pushToken": {
+                                                "description": "The device's pushtoken (Catapush / Apple Push)",
+                                                "type": "string",
+                                                "x-go-name": "PushToken"
+                                            },
+                                            "pushTokenDevelopment": {
+                                                "description": "Defines if the given push-token should be used in a development-environment or not (APNS only)",
+                                                "type": "boolean",
+                                                "x-go-name": "PushTokenDevelopment"
+                                            }
+                                        },
+                                        "x-go-package": "groupalarm.com/go/app/api/services"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "owner_id is missing or in wrong format"
+                    },
+                    "500": {
+                        "description": "Unexpected database error"
+                    }
+                }
+            },
+            "post": {
+                "description": "Create a device configuration for specific user, used by our iOS / Android app",
+                "tags": [
+                    "device"
+                ],
+                "operationId": "Create",
+                "responses": {
+                    "200": {
+                        "description": "created device configuration",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "description": "Device is the definition of an app-running device configuration",
+                                    "type": "object",
+                                    "required": [
+                                        "name",
+                                        "os",
+                                        "pushToken",
+                                        "pushTokenDevelopment",
+                                        "active",
+                                        "ownerID"
+                                    ],
+                                    "properties": {
+                                        "active": {
+                                            "description": "Whether this device will be used for notifications or not.",
+                                            "type": "boolean",
+                                            "x-go-name": "Active"
+                                        },
+                                        "id": {
+                                            "description": "This device's ID. Will be set by the service on creation.",
+                                            "type": "integer",
+                                            "format": "int64",
+                                            "x-go-name": "ID"
+                                        },
+                                        "name": {
+                                            "description": "User-wide unique name for this device (e.g. Apple iPhone XS).",
+                                            "type": "string",
+                                            "x-go-name": "Name"
+                                        },
+                                        "os": {
+                                            "description": "The device's OS (e.g. Android 9.0.1 / iOS 12).\nYou should at least include the \"android\" or \"ios\" keyword to allow a distinction between our push services.",
+                                            "type": "string",
+                                            "x-go-name": "OS"
+                                        },
+                                        "ownerID": {
+                                            "description": "ID of the user this device is created for.",
+                                            "type": "integer",
+                                            "format": "int64",
+                                            "x-go-name": "OwnerID"
+                                        },
+                                        "pushToken": {
+                                            "description": "The device's pushtoken (Catapush / Apple Push)",
+                                            "type": "string",
+                                            "x-go-name": "PushToken"
+                                        },
+                                        "pushTokenDevelopment": {
+                                            "description": "Defines if the given push-token should be used in a development-environment or not (APNS only)",
+                                            "type": "boolean",
+                                            "x-go-name": "PushTokenDevelopment"
+                                        }
+                                    },
+                                    "x-go-package": "groupalarm.com/go/app/api/services"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "device configuration payload is missing or in wrong format"
+                    },
+                    "500": {
+                        "description": "Unexpected database error"
+                    }
+                },
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "description": "Device is the definition of an app-running device configuration",
+                                "type": "object",
+                                "required": [
+                                    "name",
+                                    "os",
+                                    "pushToken",
+                                    "pushTokenDevelopment",
+                                    "active",
+                                    "ownerID"
+                                ],
+                                "properties": {
+                                    "active": {
+                                        "description": "Whether this device will be used for notifications or not.",
+                                        "type": "boolean",
+                                        "x-go-name": "Active"
+                                    },
+                                    "id": {
+                                        "description": "This device's ID. Will be set by the service on creation.",
+                                        "type": "integer",
+                                        "format": "int64",
+                                        "x-go-name": "ID"
+                                    },
+                                    "name": {
+                                        "description": "User-wide unique name for this device (e.g. Apple iPhone XS).",
+                                        "type": "string",
+                                        "x-go-name": "Name"
+                                    },
+                                    "os": {
+                                        "description": "The device's OS (e.g. Android 9.0.1 / iOS 12).\nYou should at least include the \"android\" or \"ios\" keyword to allow a distinction between our push services.",
+                                        "type": "string",
+                                        "x-go-name": "OS"
+                                    },
+                                    "ownerID": {
+                                        "description": "ID of the user this device is created for.",
+                                        "type": "integer",
+                                        "format": "int64",
+                                        "x-go-name": "OwnerID"
+                                    },
+                                    "pushToken": {
+                                        "description": "The device's pushtoken (Catapush / Apple Push)",
+                                        "type": "string",
+                                        "x-go-name": "PushToken"
+                                    },
+                                    "pushTokenDevelopment": {
+                                        "description": "Defines if the given push-token should be used in a development-environment or not (APNS only)",
+                                        "type": "boolean",
+                                        "x-go-name": "PushTokenDevelopment"
+                                    }
+                                },
+                                "x-go-package": "groupalarm.com/go/app/api/services"
+                            }
+                        }
+                    },
+                    "description": "device configuration payload",
+                    "required": true
+                }
+            }
+        },
+        "/device/{deviceID}": {
+            "get": {
+                "description": "Gets a device configuration",
+                "tags": [
+                    "device"
+                ],
+                "operationId": "Get",
+                "parameters": [
+                    {
+                        "description": "ID of a device configuration",
+                        "name": "deviceID",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "int64"
+                        }
+                    },
+                    {
+                        "description": "requesting organization, not required if user accesses his own resources",
+                        "name": "organization_id",
+                        "in": "query",
+                        "schema": {
+                            "type": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "requested device configuration",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "description": "Device is the definition of an app-running device configuration",
+                                    "type": "object",
+                                    "required": [
+                                        "name",
+                                        "os",
+                                        "pushToken",
+                                        "pushTokenDevelopment",
+                                        "active",
+                                        "ownerID"
+                                    ],
+                                    "properties": {
+                                        "active": {
+                                            "description": "Whether this device will be used for notifications or not.",
+                                            "type": "boolean",
+                                            "x-go-name": "Active"
+                                        },
+                                        "id": {
+                                            "description": "This device's ID. Will be set by the service on creation.",
+                                            "type": "integer",
+                                            "format": "int64",
+                                            "x-go-name": "ID"
+                                        },
+                                        "name": {
+                                            "description": "User-wide unique name for this device (e.g. Apple iPhone XS).",
+                                            "type": "string",
+                                            "x-go-name": "Name"
+                                        },
+                                        "os": {
+                                            "description": "The device's OS (e.g. Android 9.0.1 / iOS 12).\nYou should at least include the \"android\" or \"ios\" keyword to allow a distinction between our push services.",
+                                            "type": "string",
+                                            "x-go-name": "OS"
+                                        },
+                                        "ownerID": {
+                                            "description": "ID of the user this device is created for.",
+                                            "type": "integer",
+                                            "format": "int64",
+                                            "x-go-name": "OwnerID"
+                                        },
+                                        "pushToken": {
+                                            "description": "The device's pushtoken (Catapush / Apple Push)",
+                                            "type": "string",
+                                            "x-go-name": "PushToken"
+                                        },
+                                        "pushTokenDevelopment": {
+                                            "description": "Defines if the given push-token should be used in a development-environment or not (APNS only)",
+                                            "type": "boolean",
+                                            "x-go-name": "PushTokenDevelopment"
+                                        }
+                                    },
+                                    "x-go-package": "groupalarm.com/go/app/api/services"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Unexpected database error"
+                    }
+                }
+            },
+            "put": {
+                "description": "Updates an existing device configuration",
+                "tags": [
+                    "device"
+                ],
+                "operationId": "Update",
+                "parameters": [
+                    {
+                        "description": "ID of an existing device configuration",
+                        "name": "deviceID",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "int64"
+                        }
+                    },
+                    {
+                        "description": "requesting organization, not required if user accesses his own resources",
+                        "name": "organization_id",
+                        "in": "query",
+                        "schema": {
+                            "type": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "updated device configuration",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "description": "Device is the definition of an app-running device configuration",
+                                    "type": "object",
+                                    "required": [
+                                        "name",
+                                        "os",
+                                        "pushToken",
+                                        "pushTokenDevelopment",
+                                        "active",
+                                        "ownerID"
+                                    ],
+                                    "properties": {
+                                        "active": {
+                                            "description": "Whether this device will be used for notifications or not.",
+                                            "type": "boolean",
+                                            "x-go-name": "Active"
+                                        },
+                                        "id": {
+                                            "description": "This device's ID. Will be set by the service on creation.",
+                                            "type": "integer",
+                                            "format": "int64",
+                                            "x-go-name": "ID"
+                                        },
+                                        "name": {
+                                            "description": "User-wide unique name for this device (e.g. Apple iPhone XS).",
+                                            "type": "string",
+                                            "x-go-name": "Name"
+                                        },
+                                        "os": {
+                                            "description": "The device's OS (e.g. Android 9.0.1 / iOS 12).\nYou should at least include the \"android\" or \"ios\" keyword to allow a distinction between our push services.",
+                                            "type": "string",
+                                            "x-go-name": "OS"
+                                        },
+                                        "ownerID": {
+                                            "description": "ID of the user this device is created for.",
+                                            "type": "integer",
+                                            "format": "int64",
+                                            "x-go-name": "OwnerID"
+                                        },
+                                        "pushToken": {
+                                            "description": "The device's pushtoken (Catapush / Apple Push)",
+                                            "type": "string",
+                                            "x-go-name": "PushToken"
+                                        },
+                                        "pushTokenDevelopment": {
+                                            "description": "Defines if the given push-token should be used in a development-environment or not (APNS only)",
+                                            "type": "boolean",
+                                            "x-go-name": "PushTokenDevelopment"
+                                        }
+                                    },
+                                    "x-go-package": "groupalarm.com/go/app/api/services"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "device configuration payload is missing or in wrong format"
+                    },
+                    "500": {
+                        "description": "Unexpected database error"
+                    }
+                },
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "description": "Device is the definition of an app-running device configuration",
+                                "type": "object",
+                                "required": [
+                                    "name",
+                                    "os",
+                                    "pushToken",
+                                    "pushTokenDevelopment",
+                                    "active",
+                                    "ownerID"
+                                ],
+                                "properties": {
+                                    "active": {
+                                        "description": "Whether this device will be used for notifications or not.",
+                                        "type": "boolean",
+                                        "x-go-name": "Active"
+                                    },
+                                    "id": {
+                                        "description": "This device's ID. Will be set by the service on creation.",
+                                        "type": "integer",
+                                        "format": "int64",
+                                        "x-go-name": "ID"
+                                    },
+                                    "name": {
+                                        "description": "User-wide unique name for this device (e.g. Apple iPhone XS).",
+                                        "type": "string",
+                                        "x-go-name": "Name"
+                                    },
+                                    "os": {
+                                        "description": "The device's OS (e.g. Android 9.0.1 / iOS 12).\nYou should at least include the \"android\" or \"ios\" keyword to allow a distinction between our push services.",
+                                        "type": "string",
+                                        "x-go-name": "OS"
+                                    },
+                                    "ownerID": {
+                                        "description": "ID of the user this device is created for.",
+                                        "type": "integer",
+                                        "format": "int64",
+                                        "x-go-name": "OwnerID"
+                                    },
+                                    "pushToken": {
+                                        "description": "The device's pushtoken (Catapush / Apple Push)",
+                                        "type": "string",
+                                        "x-go-name": "PushToken"
+                                    },
+                                    "pushTokenDevelopment": {
+                                        "description": "Defines if the given push-token should be used in a development-environment or not (APNS only)",
+                                        "type": "boolean",
+                                        "x-go-name": "PushTokenDevelopment"
+                                    }
+                                },
+                                "x-go-package": "groupalarm.com/go/app/api/services"
+                            }
+                        }
+                    },
+                    "description": "device configuration payload",
+                    "required": true
+                }
+            },
+            "delete": {
+                "description": "Delete an existing device configuration",
+                "tags": [
+                    "device"
+                ],
+                "operationId": "Delete",
+                "parameters": [
+                    {
+                        "description": "ID of an existing device configuration",
+                        "name": "deviceID",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "int64"
+                        }
+                    },
+                    {
+                        "description": "requesting organization, not required if user accesses his own resources",
+                        "name": "organization_id",
+                        "in": "query",
+                        "schema": {
+                            "type": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "deleted device configuration",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "status": "deleted"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "passed deviceID is missing or in wrong format"
+                    },
+                    "500": {
+                        "description": "Unexpected database error"
+                    }
+                }
+            }
+        },
+        "/disabled": {
+            "get": {
+                "description": "Returns whether the given organization has disabled this way of alarming or not",
+                "tags": [
+                    "organizations"
+                ],
+                "operationId": "GetDisabledOrganization",
+                "parameters": [
+                    {
+                        "description": "requesting organization",
+                        "name": "organization_id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "whether this way of alarming is disabled or not",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "description": "IsDisabled is the request and response of requests via the api",
+                                        "type": "object",
+                                        "properties": {
+                                            "isDisabled": {
+                                                "type": "boolean",
+                                                "x-go-name": "IsDisabled"
+                                            }
+                                        },
+                                        "x-go-package": "groupalarm.com/go/app/api/services"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "organization_id is missing or in wrong format"
+                    },
+                    "500": {
+                        "description": "Unexpected database error"
+                    }
+                }
+            },
+            "put": {
+                "description": "Sets whether the given organization has this way of alarming disabled or not",
+                "tags": [
+                    "organizations"
+                ],
+                "operationId": "SetDisabledOrganization",
+                "parameters": [
+                    {
+                        "description": "requesting organization",
+                        "name": "organization_id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "request successful"
+                    },
+                    "400": {
+                        "description": "organization_id is missing or in wrong format"
+                    },
+                    "500": {
+                        "description": "Unexpected database error"
+                    }
+                },
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "description": "IsDisabled is the request and response of requests via the api",
+                                "type": "object",
+                                "properties": {
+                                    "isDisabled": {
+                                        "type": "boolean",
+                                        "x-go-name": "IsDisabled"
+                                    }
+                                },
+                                "x-go-package": "groupalarm.com/go/app/api/services"
+                            }
+                        }
+                    },
+                    "description": "isDisabled payload",
+                    "required": true
+                }
+            }
+        },
+        "/push/answered/{token}/{answer}": {
+            "post": {
+                "description": "Sets a push's alarm answer",
+                "tags": [
+                    "push"
+                ],
+                "operationId": "Answered",
+                "parameters": [
+                    {
+                        "description": "confirmToken associated with this push",
+                        "name": "token",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "description": "answer given by the user (yes / no)",
+                        "name": "answer",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "answer saved"
+                    },
+                    "400": {
+                        "description": "token / answer not found or invalid"
+                    },
+                    "500": {
+                        "description": "unexpected error"
+                    }
+                }
+            }
+        },
+        "/push/delivered/{token}": {
+            "post": {
+                "description": "Sets a push's status to delivered",
+                "tags": [
+                    "push"
+                ],
+                "operationId": "Delivered",
+                "parameters": [
+                    {
+                        "description": "confirmToken associated with this push",
+                        "name": "token",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "status saved"
+                    },
+                    "400": {
+                        "description": "token not found or invalid"
+                    },
+                    "500": {
+                        "description": "unexpected error"
+                    }
+                }
+            }
+        }
+    },
+    "servers": [
+        {
+            "url": "https://app.groupalarm.com/api/v1/app"
+        }
+    ],
+    "components": {
+        "requestBodies": {
+            "Device": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "description": "Device is the definition of an app-running device configuration",
+                            "type": "object",
+                            "required": [
+                                "name",
+                                "os",
+                                "pushToken",
+                                "pushTokenDevelopment",
+                                "active",
+                                "ownerID"
+                            ],
+                            "properties": {
+                                "active": {
+                                    "description": "Whether this device will be used for notifications or not.",
+                                    "type": "boolean",
+                                    "x-go-name": "Active"
+                                },
+                                "id": {
+                                    "description": "This device's ID. Will be set by the service on creation.",
+                                    "type": "integer",
+                                    "format": "int64",
+                                    "x-go-name": "ID"
+                                },
+                                "name": {
+                                    "description": "User-wide unique name for this device (e.g. Apple iPhone XS).",
+                                    "type": "string",
+                                    "x-go-name": "Name"
+                                },
+                                "os": {
+                                    "description": "The device's OS (e.g. Android 9.0.1 / iOS 12).\nYou should at least include the \"android\" or \"ios\" keyword to allow a distinction between our push services.",
+                                    "type": "string",
+                                    "x-go-name": "OS"
+                                },
+                                "ownerID": {
+                                    "description": "ID of the user this device is created for.",
+                                    "type": "integer",
+                                    "format": "int64",
+                                    "x-go-name": "OwnerID"
+                                },
+                                "pushToken": {
+                                    "description": "The device's pushtoken (Catapush / Apple Push)",
+                                    "type": "string",
+                                    "x-go-name": "PushToken"
+                                },
+                                "pushTokenDevelopment": {
+                                    "description": "Defines if the given push-token should be used in a development-environment or not (APNS only)",
+                                    "type": "boolean",
+                                    "x-go-name": "PushTokenDevelopment"
+                                }
+                            },
+                            "x-go-package": "groupalarm.com/go/app/api/services"
+                        }
+                    }
+                },
+                "description": "device configuration payload",
+                "required": true
+            }
+        },
+        "securitySchemes": {
+            "API_Token": {
+                "description": "To use this API, you need an API-Token from the RBAC settings of your GroupAlarm organization. Place the token inside the HTTP-Header `API-Token` for every request, otherwise the API will return an \"401 Unauthorized\" error for your request.",
+                "type": "apiKey",
+                "name": "API-TOKEN",
+                "in": "header"
+            },
+            "Personal-Access-Token": {
+                "description": "To use this API, you need a Personal Access Token from your profile settings. Place the token inside the HTTP-Header `Personal-Access-Token` for every request, otherwise the API will return an \"401 Unauthorized\" error for your request.",
+                "type": "apiKey",
+                "name": "Personal-Access-Token",
+                "in": "header"
+            }
+        },
+        "schemas": {
+            "AccessAllowedResponse": {
+                "description": "AccessAllowedResponse contains whether the organization allows access or not",
+                "type": "object",
+                "properties": {
+                    "accessAllowed": {
+                        "type": "boolean",
+                        "x-go-name": "AccessAllowed"
+                    }
+                },
+                "x-go-package": "groupalarm.com/go/support/api/services"
+            },
+            "AlarmStatus": {
+                "description": "rename: DeliveryStatus",
+                "type": "integer",
+                "format": "int64",
+                "x-go-package": "groupalarm.com/go/messaging/api/services"
+            },
+            "AlarmStatusMessage": {
+                "description": "rename: DeviceStatus",
+                "type": "object",
+                "properties": {
+                    "AlarmStatus": {
+                        "description": "rename: DeliveryStatus",
+                        "type": "integer",
+                        "format": "int64",
+                        "x-go-package": "groupalarm.com/go/messaging/api/services"
+                    },
+                    "Date": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "DeviceName": {
+                        "type": "string"
+                    },
+                    "DeviceType": {
+                        "type": "string",
+                        "x-go-package": "groupalarm.com/go/messaging/api/services"
+                    },
+                    "MessageID": {
+                        "type": "string"
+                    }
+                },
+                "x-go-package": "groupalarm.com/go/messaging/api/services"
+            },
+            "AlarmStatusMessageService": {
+                "type": "object",
+                "x-go-package": "groupalarm.com/go/messaging/api/services"
+            },
+            "AlarmStatusOverview": {
+                "description": "Definition of an alarm status overview",
+                "type": "object",
+                "properties": {
+                    "devices": {
+                        "type": "array",
+                        "items": {
+                            "description": "Definition of a single alarmed device",
+                            "type": "object",
+                            "properties": {
+                                "date": {
+                                    "type": "string",
+                                    "format": "date-time",
+                                    "x-go-name": "Date"
+                                },
+                                "name": {
+                                    "type": "string",
+                                    "x-go-name": "DeviceName"
+                                },
+                                "status": {
+                                    "description": "rename: DeliveryStatus",
+                                    "type": "integer",
+                                    "format": "int64",
+                                    "x-go-package": "groupalarm.com/go/messaging/api/services"
+                                },
+                                "type": {
+                                    "type": "string",
+                                    "x-go-package": "groupalarm.com/go/messaging/api/services"
+                                }
+                            },
+                            "x-go-package": "groupalarm.com/go/messaging/api/services"
+                        },
+                        "x-go-name": "Devices"
+                    },
+                    "messageId": {
+                        "type": "string",
+                        "x-go-name": "MessageID"
+                    }
+                },
+                "x-go-package": "groupalarm.com/go/messaging/api/services"
+            },
+            "AlarmStatusOverviewDevice": {
+                "description": "Definition of a single alarmed device",
+                "type": "object",
+                "properties": {
+                    "date": {
+                        "type": "string",
+                        "format": "date-time",
+                        "x-go-name": "Date"
+                    },
+                    "name": {
+                        "type": "string",
+                        "x-go-name": "DeviceName"
+                    },
+                    "status": {
+                        "description": "rename: DeliveryStatus",
+                        "type": "integer",
+                        "format": "int64",
+                        "x-go-package": "groupalarm.com/go/messaging/api/services"
+                    },
+                    "type": {
+                        "type": "string",
+                        "x-go-package": "groupalarm.com/go/messaging/api/services"
+                    }
+                },
+                "x-go-package": "groupalarm.com/go/messaging/api/services"
+            },
+            "BulkUserElement": {
+                "description": "BulkUserElement describes an user bulk element",
+                "type": "object",
+                "properties": {
+                    "email": {
+                        "type": "string",
+                        "x-go-name": "Email"
+                    },
+                    "id": {
+                        "type": "integer",
+                        "format": "int64",
+                        "x-go-name": "ID"
+                    },
+                    "labels": {
+                        "type": "array",
+                        "items": {
+                            "description": "Label describes a label payload",
+                            "type": "object",
+                            "required": [
+                                "organizationID",
+                                "name"
+                            ],
+                            "properties": {
+                                "assignees": {
+                                    "description": "assigned user for this label",
+                                    "type": "array",
+                                    "items": {
+                                        "type": "integer",
+                                        "format": "int64"
+                                    },
+                                    "x-go-name": "Assignees"
+                                },
+                                "color": {
+                                    "description": "hex color code",
+                                    "type": "string",
+                                    "x-go-name": "Color"
+                                },
+                                "description": {
+                                    "description": "description for this labels",
+                                    "type": "string",
+                                    "x-go-name": "Description"
+                                },
+                                "id": {
+                                    "description": "id for this label",
+                                    "type": "integer",
+                                    "format": "int64",
+                                    "x-go-name": "ID"
+                                },
+                                "name": {
+                                    "description": "name of this label",
+                                    "type": "string",
+                                    "x-go-name": "Name"
+                                },
+                                "organizationID": {
+                                    "description": "organization id for this label",
+                                    "type": "integer",
+                                    "format": "int64",
+                                    "x-go-name": "OrganizationID"
+                                }
+                            },
+                            "x-go-package": "groupalarm.com/go/user/api/services"
+                        },
+                        "x-go-name": "Labels"
+                    },
+                    "rank": {
+                        "type": "string",
+                        "x-go-name": "Rank"
+                    },
+                    "roles": {
+                        "type": "array",
+                        "items": {
+                            "description": "This is used for role interaction",
+                            "type": "object",
+                            "title": "Definition of a role payload",
+                            "required": [
+                                "name",
+                                "organizationID"
+                            ],
+                            "properties": {
+                                "description": {
+                                    "description": "Optional description for this role",
+                                    "type": "string",
+                                    "x-go-name": "Description"
+                                },
+                                "id": {
+                                    "description": "ID for this role",
+                                    "type": "integer",
+                                    "format": "int64",
+                                    "minimum": 1,
+                                    "x-go-name": "ID"
+                                },
+                                "name": {
+                                    "description": "Name for this role",
+                                    "type": "string",
+                                    "x-go-name": "Name"
+                                },
+                                "organizationID": {
+                                    "description": "Connected organization ID",
+                                    "type": "integer",
+                                    "format": "int64",
+                                    "minimum": 1,
+                                    "x-go-name": "OrganizationID"
+                                },
+                                "type": {
+                                    "description": "Definition of default organization roles",
+                                    "type": "string",
+                                    "x-go-name": "Type"
+                                }
+                            },
+                            "x-go-package": "groupalarm.com/go/rbac/api/services"
+                        },
+                        "x-go-name": "Roles"
+                    }
+                },
+                "x-go-package": "groupalarm.com/go/user/api/services"
+            },
+            "Device": {
+                "description": "Device is the definition of an app-running device configuration",
+                "type": "object",
+                "required": [
+                    "name",
+                    "os",
+                    "pushToken",
+                    "pushTokenDevelopment",
+                    "active",
+                    "ownerID"
+                ],
+                "properties": {
+                    "active": {
+                        "description": "Whether this device will be used for notifications or not.",
+                        "type": "boolean",
+                        "x-go-name": "Active"
+                    },
+                    "id": {
+                        "description": "This device's ID. Will be set by the service on creation.",
+                        "type": "integer",
+                        "format": "int64",
+                        "x-go-name": "ID"
+                    },
+                    "name": {
+                        "description": "User-wide unique name for this device (e.g. Apple iPhone XS).",
+                        "type": "string",
+                        "x-go-name": "Name"
+                    },
+                    "os": {
+                        "description": "The device's OS (e.g. Android 9.0.1 / iOS 12).\nYou should at least include the \"android\" or \"ios\" keyword to allow a distinction between our push services.",
+                        "type": "string",
+                        "x-go-name": "OS"
+                    },
+                    "ownerID": {
+                        "description": "ID of the user this device is created for.",
+                        "type": "integer",
+                        "format": "int64",
+                        "x-go-name": "OwnerID"
+                    },
+                    "pushToken": {
+                        "description": "The device's pushtoken (Catapush / Apple Push)",
+                        "type": "string",
+                        "x-go-name": "PushToken"
+                    },
+                    "pushTokenDevelopment": {
+                        "description": "Defines if the given push-token should be used in a development-environment or not (APNS only)",
+                        "type": "boolean",
+                        "x-go-name": "PushTokenDevelopment"
+                    }
+                },
+                "x-go-package": "groupalarm.com/go/app/api/services"
+            },
+            "DeviceService": {
+                "description": "DeviceService describes all methods used to manage iOS / Android devices",
+                "type": "object",
+                "x-go-package": "groupalarm.com/go/app/api/services"
+            },
+            "DeviceType": {
+                "type": "string",
+                "x-go-package": "groupalarm.com/go/messaging/api/services"
+            },
+            "DisabledOrganizationsService": {
+                "description": "DisabledOrganizationsService describes all methods used to organizations which have disabled this kind of alarming",
+                "type": "object",
+                "x-go-package": "groupalarm.com/go/app/api/services"
+            },
+            "DispatchStatus": {
+                "description": "DispatchStatus describes the current status of a user",
+                "type": "integer",
+                "format": "int64",
+                "x-go-package": "groupalarm.com/go/replication"
+            },
+            "Escalation": {
+                "description": "Definition of a single escalation",
+                "type": "object",
+                "required": [
+                    "wayofalarm",
+                    "delay"
+                ],
+                "properties": {
+                    "delay": {
+                        "description": "configured delay in seconds, when escalation is used after the last one",
+                        "type": "integer",
+                        "format": "int64",
+                        "x-go-name": "Delay"
+                    },
+                    "wayofalarm": {
+                        "description": "type of the alarming way e.g. email",
+                        "type": "string",
+                        "x-go-name": "WayOfAlarm"
+                    }
+                },
+                "x-go-package": "groupalarm.com/go/messaging/api/services"
+            },
+            "EscalationConfiguration": {
+                "description": "Definition of an escalation configuration payload",
+                "type": "object",
+                "required": [
+                    "escalations"
+                ],
+                "properties": {
+                    "escalations": {
+                        "description": "configured escalations",
+                        "type": "array",
+                        "items": {
+                            "description": "Definition of a single escalation",
+                            "type": "object",
+                            "required": [
+                                "wayofalarm",
+                                "delay"
+                            ],
+                            "properties": {
+                                "delay": {
+                                    "description": "configured delay in seconds, when escalation is used after the last one",
+                                    "type": "integer",
+                                    "format": "int64",
+                                    "x-go-name": "Delay"
+                                },
+                                "wayofalarm": {
+                                    "description": "type of the alarming way e.g. email",
+                                    "type": "string",
+                                    "x-go-name": "WayOfAlarm"
+                                }
+                            },
+                            "x-go-package": "groupalarm.com/go/messaging/api/services"
+                        },
+                        "x-go-name": "Escalations"
+                    },
+                    "organizationID": {
+                        "description": "organization id for editing escalation as an organization administrator",
+                        "type": "integer",
+                        "format": "int64",
+                        "x-go-name": "OrganizationID"
+                    },
+                    "userID": {
+                        "description": "assigned user for this escalation configuration for organization administrator editing",
+                        "type": "integer",
+                        "format": "int64",
+                        "x-go-name": "UserID"
+                    }
+                },
+                "x-go-package": "groupalarm.com/go/messaging/api/services"
+            },
+            "EscalationService": {
+                "type": "object",
+                "x-go-package": "groupalarm.com/go/messaging/api/services"
+            },
+            "EscalationState": {
+                "description": "Definition of an escalation state",
+                "type": "object",
+                "required": [
+                    "messageID",
+                    "escalationTier",
+                    "startTime"
+                ],
+                "properties": {
+                    "escalationTier": {
+                        "description": "current escalation tier for this message beginning at 0",
+                        "type": "integer",
+                        "format": "int64",
+                        "x-go-name": "EscalationTier"
+                    },
+                    "maxEscalationTier": {
+                        "description": "max escalation tier for this message",
+                        "type": "integer",
+                        "format": "int64",
+                        "x-go-name": "MaxEscalationTier"
+                    },
+                    "messageID": {
+                        "description": "id if the message",
+                        "type": "string",
+                        "x-go-name": "MessageID"
+                    },
+                    "startTime": {
+                        "description": "escalation start time",
+                        "type": "string",
+                        "format": "date-time",
+                        "x-go-name": "StartTime"
+                    }
+                },
+                "x-go-package": "groupalarm.com/go/messaging/api/services"
+            },
+            "EventCreationItem": {
+                "description": "EventCreationItem is used by the different services to create a new audit-log item",
+                "type": "object",
+                "properties": {
+                    "data": {
+                        "type": "string",
+                        "x-go-name": "Data"
+                    },
+                    "organizationID": {
+                        "type": "integer",
+                        "format": "int64",
+                        "x-go-name": "OrganizationID"
+                    },
+                    "service": {
+                        "type": "string",
+                        "x-go-name": "Service"
+                    },
+                    "type": {
+                        "type": "string",
+                        "x-go-name": "Type"
+                    },
+                    "userID": {
+                        "type": "integer",
+                        "format": "int64",
+                        "x-go-name": "UserID"
+                    }
+                },
+                "x-go-package": "groupalarm.com/go/audit/api/services"
+            },
+            "EventList": {
+                "description": "An EventList contains multiple EventListItems and a TotalEvents count used for pagination",
+                "type": "object",
+                "properties": {
+                    "events": {
+                        "description": "event array with events",
+                        "type": "array",
+                        "items": {
+                            "description": "An EventListItem is used as a single audit-log entry in an EventList",
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "description": "data for view",
+                                    "type": "string",
+                                    "x-go-name": "Data"
+                                },
+                                "id": {
+                                    "description": "id of this item",
+                                    "type": "integer",
+                                    "format": "int64",
+                                    "x-go-name": "ID"
+                                },
+                                "organizationID": {
+                                    "description": "connected organization as ID",
+                                    "type": "integer",
+                                    "format": "int64",
+                                    "x-go-name": "OrganizationID"
+                                },
+                                "service": {
+                                    "description": "affected service / entity-type",
+                                    "type": "string",
+                                    "x-go-name": "Service"
+                                },
+                                "timestamp": {
+                                    "description": "timestamp, when action was logged",
+                                    "type": "string",
+                                    "x-go-name": "Timestamp"
+                                },
+                                "type": {
+                                    "description": "action type [create, edit, delete]",
+                                    "type": "string",
+                                    "x-go-name": "Type"
+                                },
+                                "user": {
+                                    "description": "User is a basic copy of user-service's PublicUser",
+                                    "type": "object",
+                                    "properties": {
+                                        "email": {
+                                            "description": "users email address",
+                                            "type": "string",
+                                            "x-go-name": "EMail"
+                                        },
+                                        "id": {
+                                            "description": "ID for this user",
+                                            "type": "integer",
+                                            "format": "int64",
+                                            "x-go-name": "ID"
+                                        },
+                                        "name": {
+                                            "description": "name of the user",
+                                            "type": "string",
+                                            "x-go-name": "Name"
+                                        },
+                                        "surname": {
+                                            "description": "surname of the user",
+                                            "type": "string",
+                                            "x-go-name": "Surname"
+                                        }
+                                    },
+                                    "x-go-package": "groupalarm.com/go/audit/api/services"
+                                }
+                            },
+                            "x-go-package": "groupalarm.com/go/audit/api/services"
+                        },
+                        "x-go-name": "Events"
+                    },
+                    "totalEvents": {
+                        "description": "total amount of events inside the events array",
+                        "type": "integer",
+                        "format": "int64",
+                        "x-go-name": "TotalEvents"
+                    }
+                },
+                "x-go-package": "groupalarm.com/go/audit/api/services"
+            },
+            "EventListItem": {
+                "description": "An EventListItem is used as a single audit-log entry in an EventList",
+                "type": "object",
+                "properties": {
+                    "data": {
+                        "description": "data for view",
+                        "type": "string",
+                        "x-go-name": "Data"
+                    },
+                    "id": {
+                        "description": "id of this item",
+                        "type": "integer",
+                        "format": "int64",
+                        "x-go-name": "ID"
+                    },
+                    "organizationID": {
+                        "description": "connected organization as ID",
+                        "type": "integer",
+                        "format": "int64",
+                        "x-go-name": "OrganizationID"
+                    },
+                    "service": {
+                        "description": "affected service / entity-type",
+                        "type": "string",
+                        "x-go-name": "Service"
+                    },
+                    "timestamp": {
+                        "description": "timestamp, when action was logged",
+                        "type": "string",
+                        "x-go-name": "Timestamp"
+                    },
+                    "type": {
+                        "description": "action type [create, edit, delete]",
+                        "type": "string",
+                        "x-go-name": "Type"
+                    },
+                    "user": {
+                        "description": "User is a basic copy of user-service's PublicUser",
+                        "type": "object",
+                        "properties": {
+                            "email": {
+                                "description": "users email address",
+                                "type": "string",
+                                "x-go-name": "EMail"
+                            },
+                            "id": {
+                                "description": "ID for this user",
+                                "type": "integer",
+                                "format": "int64",
+                                "x-go-name": "ID"
+                            },
+                            "name": {
+                                "description": "name of the user",
+                                "type": "string",
+                                "x-go-name": "Name"
+                            },
+                            "surname": {
+                                "description": "surname of the user",
+                                "type": "string",
+                                "x-go-name": "Surname"
+                            }
+                        },
+                        "x-go-package": "groupalarm.com/go/audit/api/services"
+                    }
+                },
+                "x-go-package": "groupalarm.com/go/audit/api/services"
+            },
+            "EventOrgCreatedOwnerID": {
+                "description": "EventOrgCreatedOwnerID contains the event handler for a owner-created organization",
+                "type": "object",
+                "x-go-package": "groupalarm.com/go/user/api/services"
+            },
+            "EventService": {
+                "description": "EventService provides all methods needed to list and create audit-log entries",
+                "type": "object",
+                "x-go-package": "groupalarm.com/go/audit/api/services"
+            },
+            "ImportResult": {
+                "description": "ImportResult describes the result of an import",
+                "type": "string",
+                "x-go-package": "groupalarm.com/go/user/api/services"
+            },
+            "InvitationText": {
+                "description": "InvitationText contains all information about a custom invitation text",
+                "type": "object",
+                "properties": {
+                    "organization_id": {
+                        "type": "integer",
+                        "format": "int64",
+                        "x-go-name": "OrganizationID"
+                    },
+                    "text": {
+                        "type": "string",
+                        "x-go-name": "Text"
+                    }
+                },
+                "x-go-package": "groupalarm.com/go/user/api/services"
+            },
+            "InvitationTextService": {
+                "description": "InvitationTextService provides all functions needed to manage an organization's invitation text",
+                "type": "object",
+                "x-go-package": "groupalarm.com/go/user/api/services"
+            },
+            "IsDisabled": {
+                "description": "IsDisabled is the request and response of requests via the api",
+                "type": "object",
+                "properties": {
+                    "isDisabled": {
+                        "type": "boolean",
+                        "x-go-name": "IsDisabled"
+                    }
+                },
+                "x-go-package": "groupalarm.com/go/app/api/services"
+            },
+            "Label": {
+                "description": "Label describes a label payload",
+                "type": "object",
+                "required": [
+                    "organizationID",
+                    "name"
+                ],
+                "properties": {
+                    "assignees": {
+                        "description": "assigned user for this label",
+                        "type": "array",
+                        "items": {
+                            "type": "integer",
+                            "format": "int64"
+                        },
+                        "x-go-name": "Assignees"
+                    },
+                    "color": {
+                        "description": "hex color code",
+                        "type": "string",
+                        "x-go-name": "Color"
+                    },
+                    "description": {
+                        "description": "description for this labels",
+                        "type": "string",
+                        "x-go-name": "Description"
+                    },
+                    "id": {
+                        "description": "id for this label",
+                        "type": "integer",
+                        "format": "int64",
+                        "x-go-name": "ID"
+                    },
+                    "name": {
+                        "description": "name of this label",
+                        "type": "string",
+                        "x-go-name": "Name"
+                    },
+                    "organizationID": {
+                        "description": "organization id for this label",
+                        "type": "integer",
+                        "format": "int64",
+                        "x-go-name": "OrganizationID"
+                    }
+                },
+                "x-go-package": "groupalarm.com/go/user/api/services"
+            },
+            "MFABackupCodesResponse": {
+                "description": "MFABackupCodesResponse contains a list of one-time-use emergency backup codes",
+                "type": "object",
+                "properties": {
+                    "backupCodes": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "x-go-name": "BackupCodes"
+                    }
+                },
+                "x-go-package": "groupalarm.com/go/user/api/services"
+            },
+            "MFACreateResponse": {
+                "description": "MFACreateResponse contains all information for the user to add this account to his MFA app",
+                "type": "object",
+                "properties": {
+                    "image": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer",
+                            "format": "uint8"
+                        },
+                        "x-go-name": "Image"
+                    },
+                    "secret": {
+                        "type": "string",
+                        "x-go-name": "Secret"
+                    },
+                    "url": {
+                        "type": "string",
+                        "x-go-name": "URL"
+                    }
+                },
+                "x-go-package": "groupalarm.com/go/user/api/services"
+            },
+            "MFAEnabledResponse": {
+                "description": "MFAEnabledResponse contains whether the user has MFA enabled or not",
+                "type": "object",
+                "properties": {
+                    "enabled": {
+                        "type": "boolean",
+                        "x-go-name": "Enabled"
+                    }
+                },
+                "x-go-package": "groupalarm.com/go/user/api/services"
+            },
+            "MFAService": {
+                "description": "MFAService defines all functions a multi-factor-authentication service has to implement",
+                "type": "object",
+                "x-go-package": "groupalarm.com/go/user/api/services"
+            },
+            "MembercheckResult": {
+                "description": "MembercheckResult describes a user-organization-membercheck result",
+                "type": "object",
+                "properties": {
+                    "organizationId": {
+                        "type": "integer",
+                        "format": "int64",
+                        "x-go-name": "OrganizationID"
+                    },
+                    "result": {
+                        "type": "boolean",
+                        "x-go-name": "Result"
+                    },
+                    "userId": {
+                        "type": "integer",
+                        "format": "int64",
+                        "x-go-name": "UserID"
+                    }
+                },
+                "x-go-package": "groupalarm.com/go/user/api/services"
+            },
+            "MergedUserRole": {
+                "type": "object",
+                "properties": {
+                    "roles": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "required": [
+                                "name",
+                                "organizationID"
+                            ],
+                            "properties": {
+                                "description": {
+                                    "description": "Optional description for this role",
+                                    "type": "string",
+                                    "x-go-name": "Description"
+                                },
+                                "id": {
+                                    "description": "ID for this role",
+                                    "type": "integer",
+                                    "format": "int64",
+                                    "minimum": 1,
+                                    "x-go-name": "ID"
+                                },
+                                "name": {
+                                    "description": "Name for this role",
+                                    "type": "string",
+                                    "x-go-name": "Name"
+                                },
+                                "organizationID": {
+                                    "description": "Connected organization ID",
+                                    "type": "integer",
+                                    "format": "int64",
+                                    "minimum": 1,
+                                    "x-go-name": "OrganizationID"
+                                },
+                                "role_access": {
+                                    "type": "array",
+                                    "items": {
+                                        "description": "This is used for user to role assignment",
+                                        "type": "object",
+                                        "title": "Definition of a user-role payload",
+                                        "required": [
+                                            "endpoints",
+                                            "methods"
+                                        ],
+                                        "properties": {
+                                            "endpoints": {
+                                                "description": "Concerning endpoints/services",
+                                                "type": "array",
+                                                "items": {
+                                                    "type": "string"
+                                                },
+                                                "x-go-name": "Endpoints"
+                                            },
+                                            "id": {
+                                                "description": "ID of this role access",
+                                                "type": "integer",
+                                                "format": "int64",
+                                                "minimum": 1,
+                                                "x-go-name": "ID"
+                                            },
+                                            "methods": {
+                                                "description": "Allowed HTTP methods",
+                                                "type": "array",
+                                                "items": {
+                                                    "type": "string"
+                                                },
+                                                "x-go-name": "Methods"
+                                            },
+                                            "roleID": {
+                                                "description": "ID of the role",
+                                                "type": "integer",
+                                                "format": "int64",
+                                                "minimum": 1,
+                                                "x-go-name": "RoleID"
+                                            }
+                                        },
+                                        "x-go-package": "groupalarm.com/go/rbac/api/services"
+                                    },
+                                    "x-go-name": "RoleAccess"
+                                },
+                                "type": {
+                                    "description": "Definition of default organization roles",
+                                    "type": "string",
+                                    "x-go-name": "Type"
+                                }
+                            },
+                            "x-go-package": "groupalarm.com/go/rbac/api/services"
+                        },
+                        "x-go-name": "Roles"
+                    },
+                    "userID": {
+                        "type": "integer",
+                        "format": "int64",
+                        "x-go-name": "UserID"
+                    }
+                },
+                "x-go-package": "groupalarm.com/go/rbac/api/services"
+            },
+            "Organization": {
+                "description": "Organization defines an organization payload",
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64",
+                        "x-go-name": "ID"
+                    },
+                    "name": {
+                        "type": "string",
+                        "x-go-name": "Name"
+                    }
+                },
+                "x-go-package": "groupalarm.com/go/user/api/services"
+            },
+            "OrganizationService": {
+                "description": "OrganizationService provides all functions needed to check for expired accesses to organizations",
+                "type": "object",
+                "properties": {
+                    "CheckForExpiredAccesses": {
+                        "type": "string"
+                    }
+                },
+                "x-go-package": "groupalarm.com/go/support/api/services"
+            },
+            "PersonalAccessToken": {
+                "description": "This is used for personal access token interaction",
+                "type": "object",
+                "title": "Definition of a personal access token payload",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64",
+                        "x-go-name": "ID"
+                    },
+                    "name": {
+                        "type": "string",
+                        "x-go-name": "Name"
+                    },
+                    "token": {
+                        "type": "string",
+                        "x-go-name": "Token"
+                    },
+                    "userID": {
+                        "type": "integer",
+                        "format": "int64",
+                        "x-go-name": "UserID"
+                    }
+                },
+                "x-go-package": "groupalarm.com/go/rbac/api/services"
+            },
+            "PersonalAccessTokenRequest": {
+                "description": "This is used for creation of personal access tokens",
+                "type": "object",
+                "title": "Definition of a personal access token request payload",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "x-go-name": "Name"
+                    },
+                    "userID": {
+                        "type": "integer",
+                        "format": "int64",
+                        "x-go-name": "UserID"
+                    }
+                },
+                "x-go-package": "groupalarm.com/go/rbac/api/services"
+            },
+            "PersonalAccessTokenService": {
+                "description": "PersonalAccessTokenService contains all methods needed to implement our service",
+                "type": "object",
+                "x-go-package": "groupalarm.com/go/rbac/api/services"
+            },
+            "PostgresAlarmStatusMessageService": {
+                "type": "object",
+                "x-go-package": "groupalarm.com/go/messaging/api/services"
+            },
+            "PostgresDeviceService": {
+                "description": "PostgresDeviceService is our implementation of DeviceService using a database",
+                "type": "object",
+                "x-go-package": "groupalarm.com/go/app/api/services"
+            },
+            "PostgresDisabledOrganizationsService": {
+                "description": "PostgresDisabledOrganizationsService is our implementation of DisabledOrganizationsService using a database",
+                "type": "object",
+                "x-go-package": "groupalarm.com/go/app/api/services"
+            },
+            "PostgresEscalationService": {
+                "type": "object",
+                "x-go-package": "groupalarm.com/go/messaging/api/services"
+            },
+            "PostgresEventService": {
+                "description": "PostgresEventService is our implementation of EventService using a Postgres database",
+                "type": "object",
+                "x-go-package": "groupalarm.com/go/audit/api/services"
+            },
+            "PostgresInvitationTextService": {
+                "description": "PostgresInvitationTextService is our implementation of InvitationTextService using a Postgres database",
+                "type": "object",
+                "x-go-package": "groupalarm.com/go/user/api/services"
+            },
+            "PostgresMFAService": {
+                "description": "PostgresMFAService is our implementation of MFAService using a Postgres database",
+                "type": "object",
+                "x-go-package": "groupalarm.com/go/user/api/services"
+            },
+            "PostgresOrganizationService": {
+                "description": "PostgresOrganizationService is our implementation of OrganizationService using a Postgres database",
+                "type": "object",
+                "x-go-package": "groupalarm.com/go/support/api/services"
+            },
+            "PostgresPersonalAccessTokenService": {
+                "description": "PostgresPersonalAccessTokenService is our PersonalAccessTokenService implementation using a database",
+                "type": "object",
+                "x-go-package": "groupalarm.com/go/rbac/api/services"
+            },
+            "PostgresRoleAccessService": {
+                "type": "object",
+                "x-go-package": "groupalarm.com/go/rbac/api/services"
+            },
+            "PostgresRoleService": {
+                "type": "object",
+                "x-go-package": "groupalarm.com/go/rbac/api/services"
+            },
+            "PostgresServiceService": {
+                "type": "object",
+                "x-go-package": "groupalarm.com/go/rbac/api/services"
+            },
+            "PostgresSupportAgentService": {
+                "description": "PostgresSupportAgentService is our implementation of SupportAgentService using a Postgres database",
+                "type": "object",
+                "x-go-package": "groupalarm.com/go/support/api/services"
+            },
+            "PostgresTokenService": {
+                "type": "object",
+                "x-go-package": "groupalarm.com/go/rbac/api/services"
+            },
+            "PostgresUserAvailabilityChangeService": {
+                "description": "PostgresUserAvailabilityChangeService is our implementation of UserAvailabilityChangeService using a Postgres database",
+                "type": "object",
+                "x-go-package": "groupalarm.com/go/user/api/services"
+            },
+            "PostgresUserRolesService": {
+                "type": "object",
+                "x-go-package": "groupalarm.com/go/rbac/api/services"
+            },
+            "PostgresUserService": {
+                "description": "PostgresUserService implements all methods from the UserService interface",
+                "type": "object",
+                "x-go-package": "groupalarm.com/go/user/api/services"
+            },
+            "PostgresUserSettingsService": {
+                "description": "PostgresUserSettingsService is our implementation of UserSettingsService using a Postgres database",
+                "type": "object",
+                "x-go-package": "groupalarm.com/go/user/api/services"
+            },
+            "PublicUser": {
+                "description": "PublicUser describes a public user payload",
+                "type": "object",
+                "properties": {
+                    "availablePreference": {
+                        "description": "defines the status the user has selected; will be set to false if user invitation is pending",
+                        "type": "boolean",
+                        "x-go-name": "AvailablePreference"
+                    },
+                    "availableStatus": {
+                        "description": "DispatchStatus describes the current status of a user",
+                        "type": "integer",
+                        "format": "int64",
+                        "x-go-package": "groupalarm.com/go/replication"
+                    },
+                    "avatarURL": {
+                        "description": "URL to the avatar of the user",
+                        "type": "string",
+                        "x-go-name": "AvatarURL"
+                    },
+                    "email": {
+                        "description": "users email address",
+                        "type": "string",
+                        "x-go-name": "Email"
+                    },
+                    "id": {
+                        "description": "ID for this user",
+                        "type": "integer",
+                        "format": "int64",
+                        "x-go-name": "ID"
+                    },
+                    "name": {
+                        "description": "name of the user",
+                        "type": "string",
+                        "x-go-name": "Name"
+                    },
+                    "pending": {
+                        "description": "defines an pending invitation (user is known, but hasn't logged in yet)",
+                        "type": "boolean",
+                        "x-go-name": "Pending"
+                    },
+                    "surname": {
+                        "description": "surname of the user",
+                        "type": "string",
+                        "x-go-name": "Surname"
+                    }
+                },
+                "x-go-package": "groupalarm.com/go/user/api/services"
+            },
+            "PublicUserList": {
+                "description": "PublicUserList describes a list of PublicUsers for pagination",
+                "type": "object",
+                "properties": {
+                    "publicUsers": {
+                        "type": "array",
+                        "items": {
+                            "description": "PublicUser describes a public user payload",
+                            "type": "object",
+                            "properties": {
+                                "availablePreference": {
+                                    "description": "defines the status the user has selected; will be set to false if user invitation is pending",
+                                    "type": "boolean",
+                                    "x-go-name": "AvailablePreference"
+                                },
+                                "availableStatus": {
+                                    "description": "DispatchStatus describes the current status of a user",
+                                    "type": "integer",
+                                    "format": "int64",
+                                    "x-go-package": "groupalarm.com/go/replication"
+                                },
+                                "avatarURL": {
+                                    "description": "URL to the avatar of the user",
+                                    "type": "string",
+                                    "x-go-name": "AvatarURL"
+                                },
+                                "email": {
+                                    "description": "users email address",
+                                    "type": "string",
+                                    "x-go-name": "Email"
+                                },
+                                "id": {
+                                    "description": "ID for this user",
+                                    "type": "integer",
+                                    "format": "int64",
+                                    "x-go-name": "ID"
+                                },
+                                "name": {
+                                    "description": "name of the user",
+                                    "type": "string",
+                                    "x-go-name": "Name"
+                                },
+                                "pending": {
+                                    "description": "defines an pending invitation (user is known, but hasn't logged in yet)",
+                                    "type": "boolean",
+                                    "x-go-name": "Pending"
+                                },
+                                "surname": {
+                                    "description": "surname of the user",
+                                    "type": "string",
+                                    "x-go-name": "Surname"
+                                }
+                            },
+                            "x-go-package": "groupalarm.com/go/user/api/services"
+                        },
+                        "x-go-name": "PublicUsers"
+                    },
+                    "totalPublicUsers": {
+                        "type": "integer",
+                        "format": "int64",
+                        "x-go-name": "TotalPublicUsers"
+                    }
+                },
+                "x-go-package": "groupalarm.com/go/user/api/services"
+            },
+            "Role": {
+                "description": "This is used for role interaction",
+                "type": "object",
+                "title": "Definition of a role payload",
+                "required": [
+                    "name",
+                    "organizationID"
+                ],
+                "properties": {
+                    "description": {
+                        "description": "Optional description for this role",
+                        "type": "string",
+                        "x-go-name": "Description"
+                    },
+                    "id": {
+                        "description": "ID for this role",
+                        "type": "integer",
+                        "format": "int64",
+                        "minimum": 1,
+                        "x-go-name": "ID"
+                    },
+                    "name": {
+                        "description": "Name for this role",
+                        "type": "string",
+                        "x-go-name": "Name"
+                    },
+                    "organizationID": {
+                        "description": "Connected organization ID",
+                        "type": "integer",
+                        "format": "int64",
+                        "minimum": 1,
+                        "x-go-name": "OrganizationID"
+                    },
+                    "type": {
+                        "description": "Definition of default organization roles",
+                        "type": "string",
+                        "x-go-name": "Type"
+                    }
+                },
+                "x-go-package": "groupalarm.com/go/rbac/api/services"
+            },
+            "RoleAccess": {
+                "description": "This is used for user to role assignment",
+                "type": "object",
+                "title": "Definition of a user-role payload",
+                "required": [
+                    "endpoints",
+                    "methods"
+                ],
+                "properties": {
+                    "endpoints": {
+                        "description": "Concerning endpoints/services",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "x-go-name": "Endpoints"
+                    },
+                    "id": {
+                        "description": "ID of this role access",
+                        "type": "integer",
+                        "format": "int64",
+                        "minimum": 1,
+                        "x-go-name": "ID"
+                    },
+                    "methods": {
+                        "description": "Allowed HTTP methods",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "x-go-name": "Methods"
+                    },
+                    "roleID": {
+                        "description": "ID of the role",
+                        "type": "integer",
+                        "format": "int64",
+                        "minimum": 1,
+                        "x-go-name": "RoleID"
+                    }
+                },
+                "x-go-package": "groupalarm.com/go/rbac/api/services"
+            },
+            "RoleAccessService": {
+                "type": "object",
+                "x-go-package": "groupalarm.com/go/rbac/api/services"
+            },
+            "RoleService": {
+                "type": "object",
+                "x-go-package": "groupalarm.com/go/rbac/api/services"
+            },
+            "RoleWithAccess": {
+                "type": "object",
+                "required": [
+                    "name",
+                    "organizationID"
+                ],
+                "properties": {
+                    "description": {
+                        "description": "Optional description for this role",
+                        "type": "string",
+                        "x-go-name": "Description"
+                    },
+                    "id": {
+                        "description": "ID for this role",
+                        "type": "integer",
+                        "format": "int64",
+                        "minimum": 1,
+                        "x-go-name": "ID"
+                    },
+                    "name": {
+                        "description": "Name for this role",
+                        "type": "string",
+                        "x-go-name": "Name"
+                    },
+                    "organizationID": {
+                        "description": "Connected organization ID",
+                        "type": "integer",
+                        "format": "int64",
+                        "minimum": 1,
+                        "x-go-name": "OrganizationID"
+                    },
+                    "role_access": {
+                        "type": "array",
+                        "items": {
+                            "description": "This is used for user to role assignment",
+                            "type": "object",
+                            "title": "Definition of a user-role payload",
+                            "required": [
+                                "endpoints",
+                                "methods"
+                            ],
+                            "properties": {
+                                "endpoints": {
+                                    "description": "Concerning endpoints/services",
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    },
+                                    "x-go-name": "Endpoints"
+                                },
+                                "id": {
+                                    "description": "ID of this role access",
+                                    "type": "integer",
+                                    "format": "int64",
+                                    "minimum": 1,
+                                    "x-go-name": "ID"
+                                },
+                                "methods": {
+                                    "description": "Allowed HTTP methods",
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    },
+                                    "x-go-name": "Methods"
+                                },
+                                "roleID": {
+                                    "description": "ID of the role",
+                                    "type": "integer",
+                                    "format": "int64",
+                                    "minimum": 1,
+                                    "x-go-name": "RoleID"
+                                }
+                            },
+                            "x-go-package": "groupalarm.com/go/rbac/api/services"
+                        },
+                        "x-go-name": "RoleAccess"
+                    },
+                    "type": {
+                        "description": "Definition of default organization roles",
+                        "type": "string",
+                        "x-go-name": "Type"
+                    }
+                },
+                "x-go-package": "groupalarm.com/go/rbac/api/services"
+            },
+            "Service": {
+                "description": "This is used for service interaction",
+                "type": "object",
+                "title": "Definition of a service payload",
+                "required": [
+                    "name",
+                    "description",
+                    "methods"
+                ],
+                "properties": {
+                    "description": {
+                        "description": "Description of this service/endpoint",
+                        "type": "string",
+                        "x-go-name": "Description"
+                    },
+                    "methods": {
+                        "description": "Allowed methods for this service",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "x-go-name": "Methods"
+                    },
+                    "name": {
+                        "description": "Name of this service/endpoint",
+                        "type": "string",
+                        "x-go-name": "Name"
+                    }
+                },
+                "x-go-package": "groupalarm.com/go/rbac/api/services"
+            },
+            "ServiceService": {
+                "type": "object",
+                "x-go-package": "groupalarm.com/go/rbac/api/services"
+            },
+            "SupportAgentResponse": {
+                "description": "SupportAgentResponse contains whether the user is a support agent or not",
+                "type": "object",
+                "properties": {
+                    "isSupportAgent": {
+                        "type": "boolean",
+                        "x-go-name": "IsSupportAgent"
+                    }
+                },
+                "x-go-package": "groupalarm.com/go/support/api/services"
+            },
+            "SupportAgentService": {
+                "description": "SupportAgentService provides all functions needed to manage support agents",
+                "type": "object",
+                "x-go-package": "groupalarm.com/go/support/api/services"
+            },
+            "SupportOrganization": {
+                "description": "SupportOrganization represents a single organization and the timestamp when it allowed support agents to access it",
+                "type": "object",
+                "properties": {
+                    "allowedTimestamp": {
+                        "type": "string",
+                        "format": "date-time",
+                        "x-go-name": "AllowedTimestamp"
+                    },
+                    "organizationId": {
+                        "type": "integer",
+                        "format": "int64",
+                        "x-go-name": "OrganizationID"
+                    },
+                    "organizationName": {
+                        "type": "string",
+                        "x-go-name": "OrganizationName"
+                    }
+                },
+                "x-go-package": "groupalarm.com/go/support/api/services"
+            },
+            "SupportOrganizationList": {
+                "description": "A SupportOrganizationList contains multiple SupportOrganizations and a TotalSupportOrganization count used for pagination",
+                "type": "object",
+                "properties": {
+                    "supportOrganizations": {
+                        "type": "array",
+                        "items": {
+                            "description": "SupportOrganization represents a single organization and the timestamp when it allowed support agents to access it",
+                            "type": "object",
+                            "properties": {
+                                "allowedTimestamp": {
+                                    "type": "string",
+                                    "format": "date-time",
+                                    "x-go-name": "AllowedTimestamp"
+                                },
+                                "organizationId": {
+                                    "type": "integer",
+                                    "format": "int64",
+                                    "x-go-name": "OrganizationID"
+                                },
+                                "organizationName": {
+                                    "type": "string",
+                                    "x-go-name": "OrganizationName"
+                                }
+                            },
+                            "x-go-package": "groupalarm.com/go/support/api/services"
+                        },
+                        "x-go-name": "SupportOrganizations"
+                    },
+                    "totalSupportOrganizations": {
+                        "type": "integer",
+                        "format": "int64",
+                        "x-go-name": "TotalSupportOrganizations"
+                    }
+                },
+                "x-go-package": "groupalarm.com/go/support/api/services"
+            },
+            "Token": {
+                "description": "This is used for token interaction",
+                "type": "object",
+                "title": "Definition of a token payload",
+                "required": [
+                    "organizationID",
+                    "name",
+                    "token"
+                ],
+                "properties": {
+                    "id": {
+                        "description": "ID for this token",
+                        "type": "integer",
+                        "format": "int64",
+                        "minimum": 1,
+                        "x-go-name": "ID"
+                    },
+                    "name": {
+                        "description": "Name for this token",
+                        "type": "string",
+                        "x-go-name": "Name"
+                    },
+                    "organizationID": {
+                        "description": "Connected organization ID",
+                        "type": "integer",
+                        "format": "int64",
+                        "minimum": 1,
+                        "x-go-name": "OrganizationID"
+                    },
+                    "token": {
+                        "description": "Actual token",
+                        "type": "string",
+                        "x-go-name": "Token"
+                    }
+                },
+                "x-go-package": "groupalarm.com/go/rbac/api/services"
+            },
+            "TokenRequest": {
+                "description": "This is used for creation of tokens",
+                "type": "object",
+                "title": "Definition of a token request payload",
+                "required": [
+                    "organizationID",
+                    "name"
+                ],
+                "properties": {
+                    "name": {
+                        "description": "Name for this token",
+                        "type": "string",
+                        "x-go-name": "Name"
+                    },
+                    "organizationID": {
+                        "description": "Connected organization ID",
+                        "type": "integer",
+                        "format": "int64",
+                        "minimum": 1,
+                        "x-go-name": "OrganizationID"
+                    }
+                },
+                "x-go-package": "groupalarm.com/go/rbac/api/services"
+            },
+            "TokenService": {
+                "type": "object",
+                "x-go-package": "groupalarm.com/go/rbac/api/services"
+            },
+            "User": {
+                "description": "User is a basic copy of user-service's PublicUser",
+                "type": "object",
+                "properties": {
+                    "email": {
+                        "description": "users email address",
+                        "type": "string",
+                        "x-go-name": "EMail"
+                    },
+                    "id": {
+                        "description": "ID for this user",
+                        "type": "integer",
+                        "format": "int64",
+                        "x-go-name": "ID"
+                    },
+                    "name": {
+                        "description": "name of the user",
+                        "type": "string",
+                        "x-go-name": "Name"
+                    },
+                    "surname": {
+                        "description": "surname of the user",
+                        "type": "string",
+                        "x-go-name": "Surname"
+                    }
+                },
+                "x-go-package": "groupalarm.com/go/audit/api/services"
+            },
+            "UserAvailabilityChange": {
+                "description": "UserAvailabilityChange contains all information for an user's scheduled availability change",
+                "type": "object",
+                "properties": {
+                    "duration": {
+                        "type": "integer",
+                        "format": "int64",
+                        "x-go-name": "Duration"
+                    },
+                    "start_time": {
+                        "type": "string",
+                        "format": "date-time",
+                        "x-go-name": "StartTime"
+                    },
+                    "user_id": {
+                        "type": "integer",
+                        "format": "int64",
+                        "x-go-name": "UserID"
+                    }
+                },
+                "x-go-package": "groupalarm.com/go/user/api/services"
+            },
+            "UserAvailabilityChangeService": {
+                "description": "UserAvailabilityChangeService provides all functions needed to manage users' availability change requests",
+                "type": "object",
+                "x-go-package": "groupalarm.com/go/user/api/services"
+            },
+            "UserCreationRequest": {
+                "description": "UserCreationRequest describes a user create payload",
+                "type": "object",
+                "properties": {
+                    "email": {
+                        "description": "users email",
+                        "type": "string",
+                        "x-go-name": "Email"
+                    },
+                    "name": {
+                        "description": "name of the user",
+                        "type": "string",
+                        "x-go-name": "Name"
+                    },
+                    "organization": {
+                        "description": "Organization defines an organization payload",
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "type": "integer",
+                                "format": "int64",
+                                "x-go-name": "ID"
+                            },
+                            "name": {
+                                "type": "string",
+                                "x-go-name": "Name"
+                            }
+                        },
+                        "x-go-package": "groupalarm.com/go/user/api/services"
+                    },
+                    "surname": {
+                        "description": "surname of the user",
+                        "type": "string",
+                        "x-go-name": "Surname"
+                    }
+                },
+                "x-go-package": "groupalarm.com/go/user/api/services"
+            },
+            "UserInvite": {
+                "description": "UserInvite describes an user invite payload",
+                "type": "object",
+                "required": [
+                    "organization",
+                    "users"
+                ],
+                "properties": {
+                    "organization": {
+                        "description": "Organization defines an organization payload",
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "type": "integer",
+                                "format": "int64",
+                                "x-go-name": "ID"
+                            },
+                            "name": {
+                                "type": "string",
+                                "x-go-name": "Name"
+                            }
+                        },
+                        "x-go-package": "groupalarm.com/go/user/api/services"
+                    },
+                    "users": {
+                        "description": "array of user bulk elements",
+                        "type": "array",
+                        "items": {
+                            "description": "BulkUserElement describes an user bulk element",
+                            "type": "object",
+                            "properties": {
+                                "email": {
+                                    "type": "string",
+                                    "x-go-name": "Email"
+                                },
+                                "id": {
+                                    "type": "integer",
+                                    "format": "int64",
+                                    "x-go-name": "ID"
+                                },
+                                "labels": {
+                                    "type": "array",
+                                    "items": {
+                                        "description": "Label describes a label payload",
+                                        "type": "object",
+                                        "required": [
+                                            "organizationID",
+                                            "name"
+                                        ],
+                                        "properties": {
+                                            "assignees": {
+                                                "description": "assigned user for this label",
+                                                "type": "array",
+                                                "items": {
+                                                    "type": "integer",
+                                                    "format": "int64"
+                                                },
+                                                "x-go-name": "Assignees"
+                                            },
+                                            "color": {
+                                                "description": "hex color code",
+                                                "type": "string",
+                                                "x-go-name": "Color"
+                                            },
+                                            "description": {
+                                                "description": "description for this labels",
+                                                "type": "string",
+                                                "x-go-name": "Description"
+                                            },
+                                            "id": {
+                                                "description": "id for this label",
+                                                "type": "integer",
+                                                "format": "int64",
+                                                "x-go-name": "ID"
+                                            },
+                                            "name": {
+                                                "description": "name of this label",
+                                                "type": "string",
+                                                "x-go-name": "Name"
+                                            },
+                                            "organizationID": {
+                                                "description": "organization id for this label",
+                                                "type": "integer",
+                                                "format": "int64",
+                                                "x-go-name": "OrganizationID"
+                                            }
+                                        },
+                                        "x-go-package": "groupalarm.com/go/user/api/services"
+                                    },
+                                    "x-go-name": "Labels"
+                                },
+                                "rank": {
+                                    "type": "string",
+                                    "x-go-name": "Rank"
+                                },
+                                "roles": {
+                                    "type": "array",
+                                    "items": {
+                                        "description": "This is used for role interaction",
+                                        "type": "object",
+                                        "title": "Definition of a role payload",
+                                        "required": [
+                                            "name",
+                                            "organizationID"
+                                        ],
+                                        "properties": {
+                                            "description": {
+                                                "description": "Optional description for this role",
+                                                "type": "string",
+                                                "x-go-name": "Description"
+                                            },
+                                            "id": {
+                                                "description": "ID for this role",
+                                                "type": "integer",
+                                                "format": "int64",
+                                                "minimum": 1,
+                                                "x-go-name": "ID"
+                                            },
+                                            "name": {
+                                                "description": "Name for this role",
+                                                "type": "string",
+                                                "x-go-name": "Name"
+                                            },
+                                            "organizationID": {
+                                                "description": "Connected organization ID",
+                                                "type": "integer",
+                                                "format": "int64",
+                                                "minimum": 1,
+                                                "x-go-name": "OrganizationID"
+                                            },
+                                            "type": {
+                                                "description": "Definition of default organization roles",
+                                                "type": "string",
+                                                "x-go-name": "Type"
+                                            }
+                                        },
+                                        "x-go-package": "groupalarm.com/go/rbac/api/services"
+                                    },
+                                    "x-go-name": "Roles"
+                                }
+                            },
+                            "x-go-package": "groupalarm.com/go/user/api/services"
+                        },
+                        "x-go-name": "Users"
+                    }
+                },
+                "x-go-package": "groupalarm.com/go/user/api/services"
+            },
+            "UserInviteResult": {
+                "description": "UserInviteResult describes the import result payload",
+                "type": "object",
+                "properties": {
+                    "importResult": {
+                        "description": "ImportResult describes the result of an import",
+                        "type": "string",
+                        "x-go-package": "groupalarm.com/go/user/api/services"
+                    },
+                    "user": {
+                        "description": "BulkUserElement describes an user bulk element",
+                        "type": "object",
+                        "properties": {
+                            "email": {
+                                "type": "string",
+                                "x-go-name": "Email"
+                            },
+                            "id": {
+                                "type": "integer",
+                                "format": "int64",
+                                "x-go-name": "ID"
+                            },
+                            "labels": {
+                                "type": "array",
+                                "items": {
+                                    "description": "Label describes a label payload",
+                                    "type": "object",
+                                    "required": [
+                                        "organizationID",
+                                        "name"
+                                    ],
+                                    "properties": {
+                                        "assignees": {
+                                            "description": "assigned user for this label",
+                                            "type": "array",
+                                            "items": {
+                                                "type": "integer",
+                                                "format": "int64"
+                                            },
+                                            "x-go-name": "Assignees"
+                                        },
+                                        "color": {
+                                            "description": "hex color code",
+                                            "type": "string",
+                                            "x-go-name": "Color"
+                                        },
+                                        "description": {
+                                            "description": "description for this labels",
+                                            "type": "string",
+                                            "x-go-name": "Description"
+                                        },
+                                        "id": {
+                                            "description": "id for this label",
+                                            "type": "integer",
+                                            "format": "int64",
+                                            "x-go-name": "ID"
+                                        },
+                                        "name": {
+                                            "description": "name of this label",
+                                            "type": "string",
+                                            "x-go-name": "Name"
+                                        },
+                                        "organizationID": {
+                                            "description": "organization id for this label",
+                                            "type": "integer",
+                                            "format": "int64",
+                                            "x-go-name": "OrganizationID"
+                                        }
+                                    },
+                                    "x-go-package": "groupalarm.com/go/user/api/services"
+                                },
+                                "x-go-name": "Labels"
+                            },
+                            "rank": {
+                                "type": "string",
+                                "x-go-name": "Rank"
+                            },
+                            "roles": {
+                                "type": "array",
+                                "items": {
+                                    "description": "This is used for role interaction",
+                                    "type": "object",
+                                    "title": "Definition of a role payload",
+                                    "required": [
+                                        "name",
+                                        "organizationID"
+                                    ],
+                                    "properties": {
+                                        "description": {
+                                            "description": "Optional description for this role",
+                                            "type": "string",
+                                            "x-go-name": "Description"
+                                        },
+                                        "id": {
+                                            "description": "ID for this role",
+                                            "type": "integer",
+                                            "format": "int64",
+                                            "minimum": 1,
+                                            "x-go-name": "ID"
+                                        },
+                                        "name": {
+                                            "description": "Name for this role",
+                                            "type": "string",
+                                            "x-go-name": "Name"
+                                        },
+                                        "organizationID": {
+                                            "description": "Connected organization ID",
+                                            "type": "integer",
+                                            "format": "int64",
+                                            "minimum": 1,
+                                            "x-go-name": "OrganizationID"
+                                        },
+                                        "type": {
+                                            "description": "Definition of default organization roles",
+                                            "type": "string",
+                                            "x-go-name": "Type"
+                                        }
+                                    },
+                                    "x-go-package": "groupalarm.com/go/rbac/api/services"
+                                },
+                                "x-go-name": "Roles"
+                            }
+                        },
+                        "x-go-package": "groupalarm.com/go/user/api/services"
+                    }
+                },
+                "x-go-package": "groupalarm.com/go/user/api/services"
+            },
+            "UserList": {
+                "description": "UserList describes a list of users for pagination",
+                "type": "object",
+                "properties": {
+                    "totalUsers": {
+                        "type": "integer",
+                        "format": "int64",
+                        "x-go-name": "TotalUsers"
+                    },
+                    "users": {
+                        "type": "array",
+                        "items": {
+                            "description": "User is a basic copy of user-service's PublicUser",
+                            "type": "object",
+                            "properties": {
+                                "email": {
+                                    "description": "users email address",
+                                    "type": "string",
+                                    "x-go-name": "EMail"
+                                },
+                                "id": {
+                                    "description": "ID for this user",
+                                    "type": "integer",
+                                    "format": "int64",
+                                    "x-go-name": "ID"
+                                },
+                                "name": {
+                                    "description": "name of the user",
+                                    "type": "string",
+                                    "x-go-name": "Name"
+                                },
+                                "surname": {
+                                    "description": "surname of the user",
+                                    "type": "string",
+                                    "x-go-name": "Surname"
+                                }
+                            },
+                            "x-go-package": "groupalarm.com/go/audit/api/services"
+                        },
+                        "x-go-name": "Users"
+                    }
+                },
+                "x-go-package": "groupalarm.com/go/user/api/services"
+            },
+            "UserRole": {
+                "description": "This is used for user to role assignment",
+                "type": "object",
+                "title": "Definition of a user-role payload",
+                "required": [
+                    "userID",
+                    "roleID"
+                ],
+                "properties": {
+                    "roleID": {
+                        "description": "ID of the role",
+                        "type": "integer",
+                        "format": "int64",
+                        "minimum": 1,
+                        "x-go-name": "RoleID"
+                    },
+                    "userID": {
+                        "description": "ID of the user",
+                        "type": "integer",
+                        "format": "int64",
+                        "minimum": 1,
+                        "x-go-name": "UserID"
+                    }
+                },
+                "x-go-package": "groupalarm.com/go/rbac/api/services"
+            },
+            "UserRolesService": {
+                "type": "object",
+                "x-go-package": "groupalarm.com/go/rbac/api/services"
+            },
+            "UserService": {
+                "description": "UserService defines all required methods for the user-logic",
+                "type": "object",
+                "x-go-package": "groupalarm.com/go/user/api/services"
+            },
+            "UserSettings": {
+                "description": "UserSettings contains all user-defined settings",
+                "type": "object",
+                "properties": {
+                    "checks": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "x-go-name": "Checks"
+                    },
+                    "defaultOrganizationId": {
+                        "type": "integer",
+                        "format": "int64",
+                        "x-go-name": "DefaultOrganizationID"
+                    },
+                    "helpTexts": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "x-go-name": "HelpTexts"
+                    },
+                    "showFeedbackButton": {
+                        "type": "boolean",
+                        "x-go-name": "ShowFeedbackButton"
+                    },
+                    "theme": {
+                        "type": "string",
+                        "x-go-name": "Theme"
+                    },
+                    "tracking": {
+                        "type": "boolean",
+                        "x-go-name": "Tracking"
+                    }
+                },
+                "x-go-package": "groupalarm.com/go/user/api/services"
+            },
+            "UserSettingsService": {
+                "description": "UserSettingsService defines all methods needed to implement a user-settings service",
+                "type": "object",
+                "x-go-package": "groupalarm.com/go/user/api/services"
+            },
+            "UserUpdate": {
+                "description": "UserUpdate describes an user update payload",
+                "type": "object",
+                "required": [
+                    "user"
+                ],
+                "properties": {
+                    "organizationId": {
+                        "description": "id of the editing organization\nnot needed if user is editing himself",
+                        "type": "integer",
+                        "format": "int64",
+                        "x-go-name": "OrganizationID"
+                    },
+                    "user": {
+                        "description": "User is a basic copy of user-service's PublicUser",
+                        "type": "object",
+                        "properties": {
+                            "email": {
+                                "description": "users email address",
+                                "type": "string",
+                                "x-go-name": "EMail"
+                            },
+                            "id": {
+                                "description": "ID for this user",
+                                "type": "integer",
+                                "format": "int64",
+                                "x-go-name": "ID"
+                            },
+                            "name": {
+                                "description": "name of the user",
+                                "type": "string",
+                                "x-go-name": "Name"
+                            },
+                            "surname": {
+                                "description": "surname of the user",
+                                "type": "string",
+                                "x-go-name": "Surname"
+                            }
+                        },
+                        "x-go-package": "groupalarm.com/go/audit/api/services"
+                    }
+                },
+                "x-go-package": "groupalarm.com/go/user/api/services"
+            }
+        }
+    },
+    "security": [
+        {
+            "API_Token": []
+        },
+        {
+            "Personal-Access-Token": []
+        }
+    ]
+}

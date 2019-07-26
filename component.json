@@ -1,0 +1,197 @@
+{
+    "title": "groupalarm App API",
+    "description": "The app service implements all app functions for GroupAlarm\n\n# Authentication\n\n<!-- ReDoc-Inject: <security-definitions> -->",
+    "docsUrl": "",
+    "url": "https://app.groupalarm.com/api/v1/app",
+    "envVars": {},
+    "credentials": {
+        "fields": {
+            "server": {
+                "label": "Server",
+                "viewClass": "SelectView",
+                "model": [
+                    "https://app.groupalarm.com/api/v1/app",
+                    "--- Custom URL"
+                ],
+                "required": true
+            },
+            "otherServer": {
+                "label": "Custom Server URL",
+                "viewClass": "TextFieldView"
+            },
+            "auth_API_Token": {
+                "label": "API-TOKEN (API_Token)",
+                "viewClass": "TextFieldView",
+                "note": "To use this API, you need an API-Token from the RBAC settings of your GroupAlarm organization. Place the token inside the HTTP-Header `API-Token` for every request, otherwise the API will return an \"401 Unauthorized\" error for your request."
+            },
+            "auth_Personal-Access-Token": {
+                "label": "Personal-Access-Token (Personal-Access-Token)",
+                "viewClass": "TextFieldView",
+                "note": "To use this API, you need a Personal Access Token from your profile settings. Place the token inside the HTTP-Header `Personal-Access-Token` for every request, otherwise the API will return an \"401 Unauthorized\" error for your request."
+            }
+        }
+    },
+    "triggers": {
+        "startFlow": {
+            "main": "./lib/triggers/startFlow.js",
+            "type": "polling",
+            "title": "Start Flow",
+            "fields": {}
+        }
+    },
+    "actions": {
+        "List": {
+            "main": "./lib/actions/List.js",
+            "title": "List",
+            "description": "Returns all devices for queried owner",
+            "fields": {
+                "verbose": {
+                    "viewClass": "CheckBoxView",
+                    "label": "Debug this step (log more data)"
+                }
+            },
+            "metadata": {
+                "in": "./lib/schemas/List.in.json",
+                "out": {
+                    "type": "object"
+                }
+            }
+        },
+        "Create": {
+            "main": "./lib/actions/Create.js",
+            "title": "Create",
+            "description": "Create a device configuration for specific user, used by our iOS / Android app",
+            "fields": {
+                "verbose": {
+                    "viewClass": "CheckBoxView",
+                    "label": "Debug this step (log more data)"
+                }
+            },
+            "metadata": {
+                "in": "./lib/schemas/Create.in.json",
+                "out": {
+                    "type": "object"
+                }
+            }
+        },
+        "Get": {
+            "main": "./lib/actions/Get.js",
+            "title": "Get",
+            "description": "Gets a device configuration",
+            "fields": {
+                "verbose": {
+                    "viewClass": "CheckBoxView",
+                    "label": "Debug this step (log more data)"
+                }
+            },
+            "metadata": {
+                "in": "./lib/schemas/Get.in.json",
+                "out": {
+                    "type": "object"
+                }
+            }
+        },
+        "Update": {
+            "main": "./lib/actions/Update.js",
+            "title": "Update",
+            "description": "Updates an existing device configuration",
+            "fields": {
+                "verbose": {
+                    "viewClass": "CheckBoxView",
+                    "label": "Debug this step (log more data)"
+                }
+            },
+            "metadata": {
+                "in": "./lib/schemas/Update.in.json",
+                "out": {
+                    "type": "object"
+                }
+            }
+        },
+        "Delete": {
+            "main": "./lib/actions/Delete.js",
+            "title": "Delete",
+            "description": "Delete an existing device configuration",
+            "fields": {
+                "verbose": {
+                    "viewClass": "CheckBoxView",
+                    "label": "Debug this step (log more data)"
+                }
+            },
+            "metadata": {
+                "in": "./lib/schemas/Delete.in.json",
+                "out": {
+                    "type": "object"
+                }
+            }
+        },
+        "GetDisabledOrganization": {
+            "main": "./lib/actions/GetDisabledOrganization.js",
+            "title": "GetDisabledOrganization",
+            "description": "Returns whether the given organization has disabled this way of alarming or not",
+            "fields": {
+                "verbose": {
+                    "viewClass": "CheckBoxView",
+                    "label": "Debug this step (log more data)"
+                }
+            },
+            "metadata": {
+                "in": "./lib/schemas/GetDisabledOrganization.in.json",
+                "out": {
+                    "type": "object"
+                }
+            }
+        },
+        "SetDisabledOrganization": {
+            "main": "./lib/actions/SetDisabledOrganization.js",
+            "title": "SetDisabledOrganization",
+            "description": "Sets whether the given organization has this way of alarming disabled or not",
+            "fields": {
+                "verbose": {
+                    "viewClass": "CheckBoxView",
+                    "label": "Debug this step (log more data)"
+                }
+            },
+            "metadata": {
+                "in": "./lib/schemas/SetDisabledOrganization.in.json",
+                "out": {
+                    "type": "object"
+                }
+            }
+        },
+        "Answered": {
+            "main": "./lib/actions/Answered.js",
+            "title": "Answered",
+            "description": "Sets a push's alarm answer",
+            "fields": {
+                "verbose": {
+                    "viewClass": "CheckBoxView",
+                    "label": "Debug this step (log more data)"
+                }
+            },
+            "metadata": {
+                "in": "./lib/schemas/Answered.in.json",
+                "out": {
+                    "type": "object"
+                }
+            }
+        },
+        "Delivered": {
+            "main": "./lib/actions/Delivered.js",
+            "title": "Delivered",
+            "description": "Sets a push's status to delivered",
+            "fields": {
+                "verbose": {
+                    "viewClass": "CheckBoxView",
+                    "label": "Debug this step (log more data)"
+                }
+            },
+            "metadata": {
+                "in": "./lib/schemas/Delivered.in.json",
+                "out": {
+                    "type": "object"
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,12 @@
+{
+    "type": "object",
+    "properties": {
+        "deviceID": {
+            "required": true,
+            "type": "int64"
+        },
+        "organization_id": {
+            "type": "int64"
+        }
+    }
+}

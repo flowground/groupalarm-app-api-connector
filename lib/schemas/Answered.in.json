@@ -1,0 +1,13 @@
+{
+    "type": "object",
+    "properties": {
+        "token": {
+            "required": true,
+            "type": "string"
+        },
+        "answer": {
+            "required": true,
+            "type": "string"
+        }
+    }
+}
